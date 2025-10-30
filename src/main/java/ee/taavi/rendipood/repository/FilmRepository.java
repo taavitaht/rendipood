@@ -3,6 +3,9 @@ package ee.taavi.rendipood.repository;
 import ee.taavi.rendipood.entity.Film;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FilmRepository extends JpaRepository <Film>{
+import java.util.List;
 
+public interface FilmRepository extends JpaRepository <Film, Long>{
+
+    List<Film> findByAvailableTrue();
 }
