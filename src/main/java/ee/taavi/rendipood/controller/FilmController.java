@@ -1,6 +1,7 @@
 package ee.taavi.rendipood.controller;
 
 import ee.taavi.rendipood.entity.Film;
+import ee.taavi.rendipood.entity.FilmType;
 import ee.taavi.rendipood.repository.FilmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,9 @@ public class FilmController {
     private FilmRepository filmRepository;
 
     // Available films
-    @GetMapping("availablefilms")
-    public List<Film> getAvailableFilms(){
-        return filmRepository.findByAvailableTrue();
+    @GetMapping("available-films")
+    public List<Film> availableFilms(){
+        return filmRepository.findByDays(0);
     }
 
     // All films
@@ -29,6 +30,8 @@ public class FilmController {
     // Add film
     @PostMapping("films")
     public List<Film> addFilm(@RequestBody Film film){
+        film.setDays(0);
+        film.setRental(null);
         filmRepository.save(film);
         return filmRepository.findAll();
     }
@@ -41,12 +44,11 @@ public class FilmController {
         return filmRepository.findAll();
     }
 
-    // Change film type, Patch request with text body
-    // localhost:8080/films/1
-    @PatchMapping("films/{id}")
-    public List<Film> patchFilm(@PathVariable Long id, @RequestBody String newType) {
-        Optional<Film> filmOptional = filmRepository.findById(id);
-        Film film = filmOptional.get();
+    // Change film type
+    // localhost:8080/change-type?id=1?newType=OLD
+    @PatchMapping("change-type")
+    public List<Film> changeFilmType(@RequestParam Long id, @RequestParam FilmType newType) {
+        Film film = filmRepository.findById(id).orElseThrow();
         film.setType(newType);
         filmRepository.save(film);
         return filmRepository.findAll();

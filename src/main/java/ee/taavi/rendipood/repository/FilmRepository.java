@@ -7,5 +7,8 @@ import java.util.List;
 
 public interface FilmRepository extends JpaRepository <Film, Long>{
 
-    List<Film> findByAvailableTrue();
+    //List<Film> findByAvailableTrue();
+
+    // SELECT * FROM films WHERE days = 0")
+    List<Film> findByDays(int days);
 }

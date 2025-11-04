@@ -6,20 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Film {
+public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String title;
-    private FilmType type;
-    private int days;
-    //private Boolean available;
+    private int id;
+    private double initialFee;
+    private double lateFee;
 
-    @ManyToOne
-    private Rental rental;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Film> films;
 }
