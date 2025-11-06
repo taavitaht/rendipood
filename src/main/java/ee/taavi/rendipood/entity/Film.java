@@ -1,5 +1,6 @@
 package ee.taavi.rendipood.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,5 +22,6 @@ public class Film {
     //private Boolean available;
 
     @ManyToOne
+    @JsonBackReference
     private Rental rental;
 }

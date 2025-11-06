@@ -1,5 +1,6 @@
 package ee.taavi.rendipood.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,5 +22,6 @@ public class Rental {
     private double lateFee;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Film> films;
 }

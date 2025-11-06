@@ -32,16 +32,26 @@ public class RentalController {
     public Rental startRental(@RequestBody List<RentalFilm> rentalFilms){
 
         Rental rental = new Rental();
+        //Rental dbRental = rentalRepository.save(rental);
 
         List<Film> films = new ArrayList<>();
         for(RentalFilm rentalFilm : rentalFilms){
+            if(rentalFilm.getRentedDays() <= 0){
+                throw new RuntimeException("Rental days must be greater than 0!");
+            }
             Film film = filmRepository.findById(rentalFilm.getFilmId()).orElseThrow();
+            if(film.getDays() > 0){
+                throw new RuntimeException("Film is already rented!");
+            }
             film.setDays(rentalFilm.getRentedDays());
             film.setRental(rental);
             films.add(film);
         }
 
         rental.setFilms(films);
+        double sum = 0;
+        // TODO: for loopis leiame summa
+        rental.setInitialFee(sum);
 
         return rentalRepository.save(rental);
 

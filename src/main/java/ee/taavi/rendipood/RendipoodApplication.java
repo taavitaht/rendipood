@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RendipoodApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RendipoodApplication.class, args);
+
+        SpringApplication.run(RendipoodApplication.class, args);
 	}
 
 }
