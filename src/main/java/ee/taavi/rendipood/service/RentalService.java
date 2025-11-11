@@ -86,9 +86,9 @@ public class RentalService {
             film.setDays(0);
             film.setRental(null);
             filmRepository.save(film);
+
         }
         rental.setLateFee(sum);
-        // TODO: delete film from rental
         return rental;
     }
 
