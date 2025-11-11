@@ -38,7 +38,7 @@ class RentalServiceTest {
         addFilmToMockDatabase(15L,FilmType.REGULAR);
         addFilmToMockDatabase(16L,FilmType.NEW);
         addFilmToMockDatabase(17L,FilmType.OLD);
-        addFilmToMockDatabase(18L,FilmType.OLD);
+        addFilmToMockDatabase(18L,FilmType.NEW);
 
         when(filmRepository.save(any())).thenReturn(new Film());
     }
@@ -51,6 +51,7 @@ class RentalServiceTest {
 
         if (film.getId() == 18L){
             film.setDays(1);
+            film.setRental(rental);
         }
 
         when(filmRepository.findById(id)).thenReturn(Optional.of(film));
@@ -112,8 +113,14 @@ class RentalServiceTest {
     }
 
     @Test
-    void calculateLateFee() {
+    void givenNewFilmIs20DaysLate_whenRerturningFilm_thenLateFeeIs8() {
 
-        // TODO
+        addFilmToRentalFilms(18L,3);
+
+        double sum = rentalService.calculateLateFee(rentalFilms).getLateFee();
+
+        assertEquals(8,sum);
+
+        // TODO ....
     }
 }
