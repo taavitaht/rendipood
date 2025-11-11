@@ -48,6 +48,13 @@ public class FilmController {
         return filmRepository.findAll();
     }
 
+    // Add all films
+    @PostMapping("add-all-films")
+    public List<Film> addAllFilms(@RequestBody List<Film> films){
+        filmRepository.saveAll(films);
+        return filmRepository.findAll();
+    }
+
     // Delete film
     // localhost:8080/films/1
     @DeleteMapping("films/{id}")

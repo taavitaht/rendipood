@@ -5,6 +5,7 @@ import ee.taavi.rendipood.entity.Rental;
 import ee.taavi.rendipood.model.RentalFilm;
 import ee.taavi.rendipood.repository.FilmRepository;
 import ee.taavi.rendipood.repository.RentalRepository;
+import ee.taavi.rendipood.service.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,7 @@ public class RentalController {
     private RentalRepository rentalRepository;
 
     @Autowired
-    private FilmRepository filmRepository;
+    private RentalService rentalService;
 
     @GetMapping("rentals")
     public List<Rental> findAll(){
@@ -32,28 +33,27 @@ public class RentalController {
     public Rental startRental(@RequestBody List<RentalFilm> rentalFilms){
 
         Rental rental = new Rental();
-        //Rental dbRental = rentalRepository.save(rental);
-
         List<Film> films = new ArrayList<>();
-        for(RentalFilm rentalFilm : rentalFilms){
-            if(rentalFilm.getRentedDays() <= 0){
-                throw new RuntimeException("Rental days must be greater than 0!");
-            }
-            Film film = filmRepository.findById(rentalFilm.getFilmId()).orElseThrow();
-            if(film.getDays() > 0){
-                throw new RuntimeException("Film is already rented!");
-            }
-            film.setDays(rentalFilm.getRentedDays());
-            film.setRental(rental);
-            films.add(film);
-        }
 
-        rental.setFilms(films);
-        double sum = 0;
-        // TODO: for loopis leiame summa
+        double sum = rentalService.getSumAndAddRentalToFilm(rentalFilms, rental, films);
+
         rental.setInitialFee(sum);
+        rental.setFilms(films);
 
         return rentalRepository.save(rental);
-
     }
+    @PostMapping("end-rental")
+    public Rental endRental(@RequestBody List<RentalFilm> rentalFilms){
+
+        //List<Film> films = rentalService.getAllFilmsFromDB(rentalFilms);
+
+        //Rental rental = rentalService.checkifAllFilmsFromSameRental(films);
+
+        ee.taavi.rendipood.entity.Rental rental = rentalService.calculateLateFee(rentalFilms);
+
+        //rental.setInitialFee(sum);
+
+        return rentalRepository.save(rental);
+    }
+
 }
